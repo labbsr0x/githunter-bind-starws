@@ -1,0 +1,33 @@
+{
+  "name": "githunter-startws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=10.20.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node githunter-starws.js",
+    "lint": "eslint --fix . --ext .js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "config": "^3.3.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "json-mapper": "0.0.12",
+    "moment": "^2.29.0",
+    "node-ambassador": "^1.0.17",
+    "qs": "^6.9.4",
+    "route-parser": "0.0.5"
+  }
+}
