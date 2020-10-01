@@ -13,7 +13,8 @@ const initRoutes = async app => {
 const configureApp = app => {
   const bodyParser = require('body-parser');
 
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit: '10mb', extended: true}));
+  app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
   var cors = require('cors');
   app.use(cors());

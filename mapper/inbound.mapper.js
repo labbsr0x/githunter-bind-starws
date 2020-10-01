@@ -3,36 +3,13 @@ const Utils = require('../utils');
 
 const h = JM.helpers;
 
-const code = JM.makeConverter({
-  name: 'name',
-  owner: 'owner',
-  description: 'description',
-  repoCreatedAt: 'createdAt',
-  primaryLanguage: 'primaryLanguage',
-  repositoryTopics: 'repositoryTopics',
-  watchers: ['watchers', h.toString],
-  stars: ['stars', h.toString],
-  forks: ['forks', h.toString],
-  lastCommitDate: 'lastCommitDate',
-  commits: ['commits', h.toString],
-  hasHomepageUrl: 'hasHomepageUrl',
-  hasReadmeFile: 'hasReadmeFile',
-  hasContributingFile: 'hasContributingFile',
-  licenseInfo: 'licenseInfo',
-  hasCodeOfConductFile: 'hasCodeOfConductFile',
-  releases: ['releases', h.toString],
-  contributors: ['contributors', h.toString],
-  languages: data => {
-    const languages = data.languages.data.map(item => item.name);
-    return languages;
-  },
-  diskUsage: ['diskUsage', h.toString],
-  provider: 'provider',
-  type: JM.helpers.def('codePageInfo'),
-});
-
 const pulls = JM.makeConverter({
-  dateTime: () => Utils.nanoSeconds(),
+  dateTime: input => {
+    if (input.dateTime) {
+      return input.dateTime;
+    }
+    return Utils.nanoSeconds();
+  },
   fields: {
     number: ['number', h.toString],
     state: 'state',
@@ -79,7 +56,12 @@ const pulls = JM.makeConverter({
 });
 
 const issues = JM.makeConverter({
-  dateTime: () => Utils.nanoSeconds(),
+  dateTime: input => {
+    if (input.dateTime) {
+      return input.dateTime;
+    }
+    return Utils.nanoSeconds();
+  },
   fields: {
     number: ['number', h.toString],
     state: 'state',
@@ -125,7 +107,12 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: () => Utils.nanoSeconds(),
+  dateTime: input => {
+    if (input.dateTime) {
+      return input.dateTime;
+    }
+    return Utils.nanoSeconds();
+  },
   fields: {
     message: input => {
       return Utils.prepareString4StarWS(`m:${input.message}`);
@@ -151,7 +138,12 @@ const commits = JM.makeConverter({
 });
 
 const userStats = JM.makeConverter({
-  dateTime: () => Utils.nanoSeconds(),
+  dateTime: input => {
+    if (input.dateTime) {
+      return input.dateTime;
+    }
+    return Utils.nanoSeconds();
+  },
   fields: {
     name: ['name', h.toString],
     login: ['login', h.toString],
@@ -175,7 +167,6 @@ const userStats = JM.makeConverter({
 });
 
 module.exports = {
-  code,
   pulls,
   issues,
   commits,

@@ -72,8 +72,8 @@ const publishMetrics = async (provider, node, data) => {
     return response;
   } catch (e) {
     console.log(e);
+    return e.response;
   }
-  return false;
 };
 
 const metrics = async (provider, node, params) => {
@@ -88,12 +88,12 @@ const metrics = async (provider, node, params) => {
   endPoint = route.reverse({ provider, node });
 
   try {
-    const response = await httpClient.get({path: endPoint, params});
+    const response = await httpClient.get({ path: endPoint, params });
     return response;
   } catch (e) {
     console.log(e);
+    return e.response;
   }
-  return false;
 };
 
 const saveJSONData = async data => {
@@ -105,14 +105,14 @@ const saveJSONData = async data => {
   const endPoint = starwsConfig.endpoints.jsonDataAPI;
   try {
     const response = await httpClient.post(endPoint, data);
-    if (response.status === 200 && response.data && response.data.link) {
-      return response.data.link;
+    if (response.status === 200 && response.data) {
+      return response.data;
     }
     return false;
   } catch (e) {
     console.log(e);
+    return e.response;
   }
-  return false;
 };
 
 const getJSONData = async url => {
@@ -121,17 +121,17 @@ const getJSONData = async url => {
     console.log('error authenticating');
     return false;
   }
-  
+
   try {
-    const response = await httpClient.get({path: url, isFullURL: true});
+    const response = await httpClient.get({ path: url, isFullURL: true });
     if (response.status === 200 && response.data) {
       return response.data;
-    } 
+    }
     return false;
   } catch (e) {
     console.log(e);
+    return e.response;
   }
-  return false;
 };
 
 module.exports = {
