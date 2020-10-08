@@ -166,9 +166,41 @@ const userStats = JM.makeConverter({
   tags: {},
 });
 
+const repositoryStats = JM.makeConverter({
+  dateTime: input => {
+    if (input.dateTime) {
+      return input.dateTime;
+    }
+    return Utils.nanoSeconds();
+  },
+  fields: {
+    frequency: ['frequency', h.toString],
+    definitionOSS: ['definitionOSS', h.toString],
+    popularity: ['popularity', h.toString],
+    friendly: ['friendly', h.toString],
+    quality: ['quality', h.toString],
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
+    },
+    dono: input => {
+      return `o:${input.owner}`;
+    },
+    name: input => {
+      return `n:${input.name}`;
+    },
+    provider: 'provider',
+    type: JM.helpers.def('repositoryStats'),
+  },
+  tags: {},
+});
+
 module.exports = {
   pulls,
   issues,
   commits,
   userStats,
+  repositoryStats,
 };

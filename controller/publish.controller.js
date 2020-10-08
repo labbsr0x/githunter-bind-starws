@@ -5,6 +5,7 @@ const nodeMapper = require('../mapper/inbound.mapper');
 const publish = async (req, res) => {
   const sourceData = req.body;
   const { provider, node } = req.params;
+  const { createRawData = false } = req.query;
 
   if (!Array.isArray(sourceData)) {
     res.send({ message: 'Body data must be an array.' });
@@ -36,6 +37,17 @@ const publish = async (req, res) => {
   }
 
   // TODO: Means that is not formatted, lets mapper it
+  let rawDataValues;
+  if (createRawData) {
+      // Save JSON Data
+    const rawDataPromise = [];
+    sourceData.forEach((theData, index) => {
+      rawDataPromise[index] = starws.saveJSONData(theData);
+    });
+
+    rawDataValues = await Promise.all(rawDataPromise);
+  }
+
   const theMaker = nodeMapper[node];
   if (!theMaker) {
     res.send({
@@ -45,8 +57,15 @@ const publish = async (req, res) => {
     return false;
   }
   const data = [];
-  sourceData.forEach(item => {
-    data.push(theMaker(item));
+  sourceData.forEach((item, index) => {
+    let d = item;
+    if (rawDataValues){
+      d = {
+        ...item,
+        rawData: rawDataValues[index].link
+      }
+    }
+    data.push(theMaker(d));
   });
 
   const starwsResp = await starws.publishMetrics(provider, node, data);
