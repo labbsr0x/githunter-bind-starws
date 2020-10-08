@@ -80,9 +80,24 @@ const userStats = JM.makeConverter({
   type: 'attributes.type',
 });
 
+const repositoryStats = JM.makeConverter({
+  dateTime: 'dateTime',
+  owner: input => Utils.prepareString4Githunter(input.attributes.dono),
+  name: input => Utils.prepareString4Githunter(input.attributes.name),
+  frequency: ['attributes.frequency', h.toNumber],
+  definitionOSS: ['attributes.definitionOSS', h.toNumber],
+  popularity: ['attributes.popularity', h.toNumber],
+  friendly: ['attributes.friendly', h.toNumber],
+  quality: ['attributes.quality', h.toNumber],
+  rawData: 'attributes.rawData',
+  provider: 'attributes.provider',
+  type: 'attributes.type',
+});
+
 module.exports = {
   pulls,
   issues,
   commits,
   userStats,
+  repositoryStats,
 };
