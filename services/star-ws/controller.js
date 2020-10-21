@@ -4,6 +4,7 @@ const config = require('config');
 const Route = require('route-parser');
 const HttpClient = require('../rest/RESTClient');
 const env = require('../../infra/env');
+const logger = require('../../config/winston');
 
 const starwsConfig = config.get('star-ws');
 const httpClient = new HttpClient({
@@ -49,9 +50,10 @@ const authenticate = async () => {
       env.starwsAuth.token_generation_time = moment();
       httpClient.addAccessToken(env.starwsAuth.access_token);
     }
+    logger.info(`Authentication successfully!`);
     return true;
   } catch (err) {
-    console.log(err);
+    logger.error(`Authentication failure! msg: ${err}`);
     return false;
   }
 };
@@ -59,7 +61,6 @@ const authenticate = async () => {
 const publishMetrics = async (provider, node, data) => {
   const isAuthenticate = await authenticate();
   if (!isAuthenticate) {
-    console.log('error authenticating');
     return false;
   }
   let endPoint = starwsConfig.endpoints.publishMetrics;
@@ -69,9 +70,10 @@ const publishMetrics = async (provider, node, data) => {
 
   try {
     const response = await httpClient.post(endPoint, data);
+    logger.info(`POST Request for path /publish successfully executed!`);
     return response;
   } catch (e) {
-    console.log(e);
+    logger.error(`POST Request for path /publish failure! ${e}`);
     return e.response;
   }
 };
@@ -79,7 +81,6 @@ const publishMetrics = async (provider, node, data) => {
 const metrics = async (provider, node, params) => {
   const isAuthenticate = await authenticate();
   if (!isAuthenticate) {
-    console.log('error authenticating');
     return false;
   }
   let endPoint = starwsConfig.endpoints.metrics;
@@ -89,9 +90,10 @@ const metrics = async (provider, node, params) => {
 
   try {
     const response = await httpClient.get({ path: endPoint, params });
+    logger.info(`GET Request for path /metrics successfully executed!`);
     return response;
   } catch (e) {
-    console.log(e);
+    logger.error(`GET Request for path /metrics failure! ${e}`);
     return e.response;
   }
 };
@@ -99,37 +101,40 @@ const metrics = async (provider, node, params) => {
 const saveJSONData = async data => {
   const isAuthenticate = await authenticate();
   if (!isAuthenticate) {
-    console.log('error authenticating');
     return false;
   }
   const endPoint = starwsConfig.endpoints.jsonDataAPI;
   try {
     const response = await httpClient.post(endPoint, data);
     if (response.status === 200 && response.data) {
+      logger.info(`POST Request to save JSON data in JSON-Data-API successfully!`);
       return response.data;
     }
+    logger.info(`POST Request to save JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    console.log(e);
+    logger.info(`POST Request to save JSON data in JSON-Data-API failure! ${e}`);
     return e.response;
   }
+  return false;
 };
 
 const getJSONData = async url => {
   const isAuthenticate = await authenticate();
   if (!isAuthenticate) {
-    console.log('error authenticating');
     return false;
   }
 
   try {
-    const response = await httpClient.get({ path: url, isFullURL: true });
+    const response = await httpClient.get({path: url, isFullURL: true});
     if (response.status === 200 && response.data) {
+      logger.info(`GET Request to get JSON data in JSON-Data-API successfully!`);
       return response.data;
     }
+    logger.info(`GET Request to get JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    console.log(e);
+    logger.info(`GET Request to get JSON data in JSON-Data-API failure! ${e}`);
     return e.response;
   }
 };

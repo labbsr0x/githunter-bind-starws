@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
 const config = require('config');
+const logger = require('../../config/winston');
 
 const serverConfig = config.get('server');
 
@@ -13,8 +14,7 @@ const initRoutes = async app => {
 const configureApp = app => {
   const bodyParser = require('body-parser');
 
-  app.use(bodyParser.json({limit: '10mb', extended: true}));
-  app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
+  app.use(bodyParser.json());
 
   var cors = require('cors');
   app.use(cors());
@@ -27,9 +27,9 @@ const startApp = app => {
   var appEnv = serverConfig;
   server.listen(appEnv.port, appEnv.host, () => {
     const env = config.util.getEnv('NODE_ENV');
-    console.log(`Starting app for environment: ${env}`);
+    logger.info(`Starting app for environment: ${env}`);
     // print a message when the server starts listening
-    console.log(`server starting on ${appEnv.host}:${appEnv.port}`);
+    logger.info(`Server starting on ${appEnv.host}:${appEnv.port}`);
   });
 };
 
