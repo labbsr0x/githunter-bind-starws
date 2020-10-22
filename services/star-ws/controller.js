@@ -4,7 +4,7 @@ const config = require('config');
 const Route = require('route-parser');
 const HttpClient = require('../rest/RESTClient');
 const env = require('../../infra/env');
-const logger = require('../../config/winston');
+const logger = require('../../config/logger');
 
 const starwsConfig = config.get('star-ws');
 const httpClient = new HttpClient({
@@ -110,10 +110,10 @@ const saveJSONData = async data => {
       logger.info(`POST Request to save JSON data in JSON-Data-API successfully!`);
       return response.data;
     }
-    logger.info(`POST Request to save JSON data in JSON-Data-API failure!`);
+    logger.error(`POST Request to save JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    logger.info(`POST Request to save JSON data in JSON-Data-API failure! ${e}`);
+    logger.error(`POST Request to save JSON data in JSON-Data-API failure! ${e}`);
     return e.response;
   }
   return false;
@@ -131,10 +131,10 @@ const getJSONData = async url => {
       logger.info(`GET Request to get JSON data in JSON-Data-API successfully!`);
       return response.data;
     }
-    logger.info(`GET Request to get JSON data in JSON-Data-API failure!`);
+    logger.error(`GET Request to get JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    logger.info(`GET Request to get JSON data in JSON-Data-API failure! ${e}`);
+    logger.error(`GET Request to get JSON data in JSON-Data-API failure! ${e}`);
     return e.response;
   }
 };

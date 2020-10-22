@@ -1,6 +1,7 @@
 'use strict';
 const starws = require('../services/star-ws/controller');
 const nodeMapper = require('../mapper/outbound.mapper');
+const logger = require('../config/logger');
 
 const metrics = async (req, res) => {
   const { provider, node, startDateTime, endDateTime } = req.query;
@@ -15,6 +16,7 @@ const metrics = async (req, res) => {
     starwsResp.data.data &&
     starwsResp.data.data.lenght == 0
   ) {
+    logger.error(`METRICS CONTROLLER: No data found.`);
     res.send({ message: 'No data found' });
     return false;
   }
@@ -22,6 +24,7 @@ const metrics = async (req, res) => {
   const maker = nodeMapper[node];
 
   if (!maker) {
+    logger.error(`METRICS CONTROLLER: Node is invalid.`);
     res.send({ data: starwsResp.data.data });
     return false;
   }

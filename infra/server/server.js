@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
 const config = require('config');
-const logger = require('../../config/winston');
+const logger = require('../../config/logger');
 
 const serverConfig = config.get('server');
 
