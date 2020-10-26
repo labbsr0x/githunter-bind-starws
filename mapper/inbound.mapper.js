@@ -64,13 +64,13 @@ const issues = JM.makeConverter({
   },
   fields: {
     number: ['number', h.toString],
-    state: 'state',
+    state: 'state', //
     createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
-    closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
-    updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
+    closedAt: input => Utils.dateFormat4StarWS(input.closedAt), //
+    updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt), //
     author: input => Utils.prepareString4StarWS(`a:${input.author}`),
-    labels: input => Utils.concatArray4StarWS(input.labels),
-    participantsTotalCount: ['participants.totalCount', h.toString],
+    labels: input => Utils.concatArray4StarWS(input.labels), //
+    participantsTotalCount: ['participants.totalCount', h.toString], //
     participants: input => {
       const participants =
         input.participants && input.participants.users
@@ -133,6 +133,33 @@ const commits = JM.makeConverter({
     },
     provider: 'provider',
     type: JM.helpers.def('commits'),
+  },
+  tags: {},
+});
+
+const comments = JM.makeConverter({
+  dateTime: input => Utils.dateFormat4StarWS(input.createdAt),
+  fields: {
+    url: 'url',
+    createdAt: data => Utils.dateFormat4StarWS(data.createdAt),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    number: ['number', h.toString],
+    url: 'url',
+    id: 'id',
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
+    },
+    dono: input => {
+      return `o:${input.owner}`;
+    },
+    name: input => {
+      return `n:${input.name}`;
+    },
+    provider: 'provider',
+    type: JM.helpers.def('comments'),
   },
   tags: {},
 });
@@ -201,6 +228,7 @@ module.exports = {
   pulls,
   issues,
   commits,
+  comments,
   userStats,
   repositoryStats,
 };

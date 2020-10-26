@@ -11,11 +11,17 @@ const metrics = async (req, res) => {
   });
 
   if (
-    starwsResp.data &&
-    starwsResp.data.data &&
-    starwsResp.data.data.lenght == 0
+    !starwsResp ||
+    (starwsResp.data &&
+      starwsResp.data.data &&
+      starwsResp.data.data.lenght == 0)
   ) {
     res.send({ message: 'No data found' });
+    return false;
+  }
+
+  if (starwsResp.status && starwsResp.status != 200) {
+    res.status(starwsResp.status).send({ message: 'Unknown error' });
     return false;
   }
 

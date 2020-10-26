@@ -2,6 +2,7 @@ const moment = require('moment');
 
 const utils = (() => {
   return {
+    dateCounter: 0,
     dateFormat4StarWS: data => {
       if (!data) {
         return moment(0).format();
@@ -17,11 +18,9 @@ const utils = (() => {
 
     dateFormat4Githunter: date => {
       const theDate = moment(date);
-      if (!theDate.isValid())
-        return date;
-      
-      if (theDate.year() <= 1970)
-        return '';
+      if (!theDate.isValid()) return date;
+
+      if (theDate.year() <= 1970) return '';
 
       return date;
     },
@@ -31,10 +30,10 @@ const utils = (() => {
       return data.substring(0, shortStringLen);
     },
 
-    prepareString4Githunter: (data) => {
+    prepareString4Githunter: data => {
       if (!data) return data;
       const regex = new RegExp('[a-z]{1}:');
-      if (regex.test(data)){
+      if (regex.test(data)) {
         return data.substr(2, data.length);
       }
 
@@ -49,9 +48,11 @@ const utils = (() => {
       return str.substring(0, shortStringLen);
     },
     nanoSeconds: () => {
-      const hrTime = process.hrtime();
-      const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
-      const nSec = nTime.substr(nTime.length - 5);
+      // const hrTime = process.hrtime();
+      // const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
+      // const nSec = nTime.substr(nTime.length - 4);
+      const nSec = `${utils.dateCounter}`.padStart(3, '0');
+      utils.dateCounter += 1;
       return moment().format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
     },
   };
