@@ -7,6 +7,7 @@ const jsonData = async (req, res) => {
 
   if (!data) {
     logger.error(`JSON DATA CONTROLLER: Data content is invalid!`);
+    res.status(401).send({ msg: 'Data content is invalid' });
   }
 
   const starwsResp = await starws.saveJSONData(data);

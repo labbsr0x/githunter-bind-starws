@@ -5,68 +5,70 @@ const utils = (() => {
   return {
     dateFormat4StarWS: data => {
       if (!data) {
-        logger.debug(`UTILS Date content is invalid!`);
+        logger.debug(`UTILS dateFormat4StarWS: Date content is invalid!`);
         return moment(0).format();
       }
 
       const theDate = moment(data);
       if (!theDate.isValid) {
-        logger.debug(`UTILS Date format to StarWS is invalid!`);
+        logger.debug(`UTILS dateFormat4StarWS: Date format to StarWS is invalid!`);
         return moment(0).format();
       }
 
-      logger.debug(`UTILS Formatted data to StarWS successfully!`);
+      logger.debug(`UTILS dateFormat4StarWS: Formatted data to StarWS successfully!`);
       return theDate.format();
     },
 
     dateFormat4Githunter: date => {
       const theDate = moment(date);
       if (!theDate.isValid()) {
-        logger.debug(`UTILS Date format to Githunter is invalid!`);
+        logger.debug(`UTILS dateFormat4Githunter: Date format to Githunter is invalid!`);
         return date;
       }
 
       if (theDate.year() <= 1970) {
-        logger.debug(`UTILS Date less than 1970!`);
+        logger.debug(`UTILS dateFormat4Githunter: Date less than 1970!`);
         return '';
       }
 
-      logger.debug(`UTILS Date to Githunter is valid!`);
+      logger.debug(`UTILS dateFormat4Githunter: Date to Githunter is valid!`);
       return date;
     },
 
     prepareString4StarWS: (data, shortStringLen = 250) => {
       if (!data) {
-        logger.debug(`UTILS String content is invalid!`);
+        logger.debug(`UTILS prepareString4StarWS: String content is invalid!`);
         return data;
       }
-      logger.debug(`UTILS String trated to StarWS successfully!`);
-      return data.substring(0, shortStringLen);
+      const d = data.substring(0, shortStringLen);
+      logger.debug(`UTILS prepareString4StarWS: ${data} -> ${d}`);
+      return d;
     },
 
     prepareString4Githunter: (data) => {
       if (!data) {
-        logger.debug(`UTILS String content is invalid!`);
+        logger.debug(`UTILS prepareString4StarWS: String content is invalid!`);
         return data;
       }
 
       const regex = new RegExp('[a-z]{1}:');
       if (regex.test(data)){
-        logger.debug(`UTILS String trated to Githunter successfully!`);
-        return data.substr(2, data.length);
+        const d = data.substr(2, data.length);
+        logger.debug(`UTILS prepareString4StarWS: ${data} -> ${d}`);
+        return d;
       }
 
-      logger.debug(`UTILS String trated to Githunter successfully!`);
+      logger.debug(`UTILS prepareString4StarWS: String trated to Githunter successfully!`);
       return data;
     },
 
     concatArray4StarWS: (data, shortStringLen = 250) => {
       const str = data && Array.isArray(data) ? data.join(',') : '';
       if (!str) {
-        logger.debug(`UTILS Array or array content is invalid!`);
+        logger.debug(`UTILS concatArray4StarWS: Array or array content is invalid!`);
         return 'no-string';
       }
-      logger.debug(`UTILS Array concatenated to StarWS successfully!`);
+      logger.debug(`UTILS concatArray4StarWS: Array concatenated to StarWS successfully!`);
       return str.substring(0, shortStringLen);
     },
     nanoSeconds: () => {
@@ -74,7 +76,7 @@ const utils = (() => {
       const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
       const nSec = nTime.substr(nTime.length - 5);
 
-      logger.debug(`UTIL Nanosecond gerated successfully!`)
+      logger.debug(`UTIL nanoSeconds: Nanosecond gerated successfully!`)
       return moment().format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
     },
   };
