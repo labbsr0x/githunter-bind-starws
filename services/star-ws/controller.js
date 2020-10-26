@@ -69,6 +69,25 @@ const publishMetrics = async (provider, node, data) => {
   endPoint = route.reverse({ provider, node });
 
   try {
+    const dateTimes = data.map(val => val.dateTime);
+    const uniq = dateTimes
+      .map(d => {
+        return {
+          count: 1,
+          d: d,
+        };
+      })
+      .reduce((a, b) => {
+        a[b.d] = (a[b.d] || 0) + b.count;
+        return a;
+      }, {});
+
+    const duplicates = Object.keys(uniq).filter(a => uniq[a] > 1);
+    if (duplicates.length > 0) {
+      const dup = data.filter(val => duplicates.includes(val.dateTime));
+      console.log(dup);
+    }
+    console.log(duplicates);
     const response = await httpClient.post(endPoint, data);
     logger.info(`POST Request for path /publish successfully executed!`);
     return response;

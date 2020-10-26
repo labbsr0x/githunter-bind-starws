@@ -2,6 +2,7 @@
 const starws = require('../services/star-ws/controller');
 const nodeMapper = require('../mapper/inbound.mapper');
 const logger = require('../config/logger');
+const utils = require('../utils');
 
 const publish = async (req, res) => {
   const sourceData = req.body;
@@ -43,7 +44,7 @@ const publish = async (req, res) => {
   // TODO: Means that is not formatted, lets mapper it
   let rawDataValues;
   if (createRawData) {
-      // Save JSON Data
+    // Save JSON Data
     const rawDataPromise = [];
     sourceData.forEach((theData, index) => {
       rawDataPromise[index] = starws.saveJSONData(theData);
@@ -64,15 +65,16 @@ const publish = async (req, res) => {
   const data = [];
   sourceData.forEach((item, index) => {
     let d = item;
-    if (rawDataValues){
+    if (rawDataValues) {
       d = {
         ...item,
-        rawData: rawDataValues[index].link
-      }
+        rawData: rawDataValues[index].link,
+      };
     }
     data.push(theMaker(d));
   });
 
+  utils.dateCounter = 0;
   const starwsResp = await starws.publishMetrics(provider, node, data);
   if (starwsResp) {
     res.status(starwsResp.status).send(starwsResp.data);
