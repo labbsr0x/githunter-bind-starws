@@ -3,6 +3,7 @@ const logger = require('../config/logger');
 
 const utils = (() => {
   return {
+    dateCounter: 0,
     dateFormat4StarWS: data => {
       if (!data) {
         logger.debug(`UTILS dateFormat4StarWS: Date content is invalid!`);
