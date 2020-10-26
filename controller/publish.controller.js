@@ -1,6 +1,7 @@
 'use strict';
 const starws = require('../services/star-ws/controller');
 const nodeMapper = require('../mapper/inbound.mapper');
+const logger = require('../config/logger');
 
 const publish = async (req, res) => {
   const sourceData = req.body;
@@ -8,6 +9,7 @@ const publish = async (req, res) => {
   const { createRawData = false } = req.query;
 
   if (!Array.isArray(sourceData)) {
+    logger.error(`PUBLISH CONTROLLER: Body data must be an array.`);
     res.send({ message: 'Body data must be an array.' });
     return false;
   }
@@ -25,11 +27,13 @@ const publish = async (req, res) => {
     if (starwsResp) {
       res.status(starwsResp.status).send(starwsResp.data);
     } else {
+      logger.error(`PUBLISH CONTROLLER: Error publishing data.`);
       res.status(500).send({ message: 'Error publishing data.' });
     }
     return false;
   } else if (checksum != 0 && checksum != sourceData.length) {
     //data formatted incorrectly
+    logger.error(`PUBLISH CONTROLLER: Some array item is missing dateTime, fields or tags data.`);
     res.send({
       message: 'Some array item is missing dateTime, fields or tags data.',
     });
@@ -50,6 +54,7 @@ const publish = async (req, res) => {
 
   const theMaker = nodeMapper[node];
   if (!theMaker) {
+    logger.error(`PUBLISH CONTROLLER: Wrong data format, no mapper for this node ${node}`);
     res.send({
       message: `Wrong data format, no mapper for this node ${node}`,
       data: sourceData,
@@ -74,6 +79,7 @@ const publish = async (req, res) => {
     return false;
   }
 
+  logger.error(`PUBLISH CONTROLLER: Error publishing data.`);
   res.status(500).send({ message: 'Error publishing data.' });
 };
 

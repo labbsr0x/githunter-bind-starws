@@ -1,4 +1,5 @@
 const { Ambassador } = require("node-ambassador");
+const logger = require("./config/winston");
 
 const TARGET = process.env["target_port"] || 443;
 const PORT = process.env["port"] || 8080;
@@ -9,7 +10,7 @@ class Stats {
   readRequest(header) {
     this.method = header.HTTPMethod;
     this.endpoint = header.HTTPResource;
-    console.log(header);
+    logger.info(header);
 
     return this;
   }
@@ -22,8 +23,8 @@ class Stats {
 let stats = new Stats();
 
 function check_token(header, rawHTTP) {
-  console.log(header);
-  console.log(rawHTTP);
+  logger.info(header);
+  logger.info(rawHTTP);
 }
 
 function override_404({ service, server }) {
@@ -51,4 +52,4 @@ new Ambassador({
   Auth,
 });
 
-console.log(`listening for request in ${PORT} and targeting ${TARGET}`);
+logger.info(`Listening for request in ${PORT} and targeting ${TARGET}`);

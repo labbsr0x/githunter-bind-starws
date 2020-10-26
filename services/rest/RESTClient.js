@@ -1,3 +1,5 @@
+const logger = require('../../config/logger');
+
 const axios = require('axios').default;
 
 class Http {
@@ -47,7 +49,7 @@ class Http {
       })
       .then(response => callback(response.status, response.data))
       .catch(err => {
-        console.log(err);
+        logger.error(err);
       });
   }
 
