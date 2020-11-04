@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "run": "node githunter-starws.js",
+    "start": "node githunter-starws.js",
     "lint": "eslint --fix . --ext .js"
   },
   "husky": {
