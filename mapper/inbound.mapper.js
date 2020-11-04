@@ -52,7 +52,9 @@ const pulls = JM.makeConverter({
     provider: 'provider',
     type: JM.helpers.def('pull'),
   },
-  tags: {},
+  tags: {
+    category: JM.helpers.def('CXF'),
+  },
 });
 
 const issues = JM.makeConverter({
@@ -103,7 +105,9 @@ const issues = JM.makeConverter({
     provider: 'provider',
     type: JM.helpers.def('issues'),
   },
-  tags: {},
+  tags: {
+    category: JM.helpers.def('CXF'),
+  },
 });
 
 const commits = JM.makeConverter({
@@ -134,7 +138,9 @@ const commits = JM.makeConverter({
     provider: 'provider',
     type: JM.helpers.def('commits'),
   },
-  tags: {},
+  tags: {
+    category: JM.helpers.def('CXF'),
+  },
 });
 
 const userStats = JM.makeConverter({
@@ -163,7 +169,9 @@ const userStats = JM.makeConverter({
     provider: 'provider',
     type: JM.helpers.def('userStats'),
   },
-  tags: {},
+  tags: {
+    category: JM.helpers.def('CXF'),
+  },
 });
 
 const repositoryStats = JM.makeConverter({
@@ -194,7 +202,9 @@ const repositoryStats = JM.makeConverter({
     provider: 'provider',
     type: JM.helpers.def('repositoryStats'),
   },
-  tags: {},
+  tags: {
+    category: JM.helpers.def('CXF'),
+  },
 });
 
 module.exports = {
