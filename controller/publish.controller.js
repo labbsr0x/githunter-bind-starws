@@ -10,7 +10,7 @@ const publish = async (req, res) => {
 
   if (!Array.isArray(sourceData)) {
     logger.error(`PUBLISH CONTROLLER: Body data must be an array.`);
-    res.send({ message: 'Body data must be an array.' });
+    res.status(500).send({ message: 'Body data must be an array.' });
     return false;
   }
 
@@ -34,7 +34,7 @@ const publish = async (req, res) => {
   } else if (checksum != 0 && checksum != sourceData.length) {
     //data formatted incorrectly
     logger.error(`PUBLISH CONTROLLER: Some array item is missing dateTime, fields or tags data.`);
-    res.send({
+    res.status(500).send({
       message: 'Some array item is missing dateTime, fields or tags data.',
     });
     return false;

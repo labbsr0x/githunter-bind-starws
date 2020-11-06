@@ -11,13 +11,9 @@ const metrics = async (req, res) => {
     endDateTime,
   });
 
-  if (
-    starwsResp.data &&
-    starwsResp.data.data &&
-    starwsResp.data.data.lenght == 0
-  ) {
-    logger.error(`METRICS CONTROLLER: No data found.`);
-    res.send({ message: 'No data found' });
+  if (!starwsResp.data || !starwsResp.data.data || starwsResp.data.data.length === 0) {
+    logger.info(`METRICS CONTROLLER: No content data.`);
+    res.status(204).send();
     return false;
   }
 
@@ -25,7 +21,7 @@ const metrics = async (req, res) => {
 
   if (!maker) {
     logger.error(`METRICS CONTROLLER: Node is invalid.`);
-    res.send({ data: starwsResp.data.data });
+    res.status(400).send({ data: starwsResp.data.data });
     return false;
   }
 
@@ -48,7 +44,7 @@ const metrics = async (req, res) => {
     data.push(theData);
   });
 
-  res.send({ data });
+  res.status(200).send({ data });
 };
 
 module.exports = metrics;
