@@ -85,7 +85,7 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: Utils.dateFormat4StarWS(input.updatedAt),
+  dateTime: Utils.dateFormat4StarWS(input.committedDate),
   fields: {
     message: input => {
       return Utils.prepareString4StarWS(`m:${input.message}`);
