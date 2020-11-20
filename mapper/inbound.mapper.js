@@ -92,6 +92,24 @@ const commits = JM.makeConverter({
     },
     committedDate: data => Utils.dateFormat4StarWS(data.committedDate),
     author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    totalParticipants: ['participants.totalCount', h.toString],
+    participants: input => {
+      const participants =
+        input.participants && input.participants.users
+          ? Utils.concatArray4StarWS(input.participants.users)
+          : '';
+      return `p:${participants}`;
+    },
+    commentsTotal: ['comments.totalCount', h.toString],
+    commentsUpdatedAt: input =>
+      Utils.dateFormat4StarWS(input.comments.updatedAt),
+    comments: input => {
+      const authors =
+        input.comments && input.comments.data
+          ? input.comments.data.map(item => item.author).join(',')
+          : '';
+      return Utils.prepareString4StarWS(`a:${authors}`);
+    },
     rawData: input => {
       if (input.rawData) {
         return input.rawData;
