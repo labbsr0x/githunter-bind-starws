@@ -4,39 +4,18 @@ const Utils = require('../utils');
 const h = JM.helpers;
 
 const pulls = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: input => Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
     number: ['number', h.toString],
-    state: 'state',
     createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
+    state: 'state',
     closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
     merged: ['merged', h.toString],
     mergedAt: input => Utils.dateFormat4StarWS(input.mergedAt),
-    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     labels: input => Utils.concatArray4StarWS(input.labels),
-    totalParticipants: ['participants.totalCount', h.toString],
-    participants: input => {
-      const participants =
-        input.participants && input.participants.users
-          ? Utils.concatArray4StarWS(input.participants.users)
-          : '';
-      return `p:${participants}`;
-    },
-    commentsTotal: ['comments.totalCount', h.toString],
-    commentsUpdatedAt: input =>
-      Utils.dateFormat4StarWS(input.comments.updatedAt),
-    comments: input => {
-      const authors =
-        input.comments && input.comments.data
-          ? input.comments.data.map(item => item.author).join(',')
-          : '';
-      return Utils.prepareString4StarWS(`a:${authors}`);
-    },
+
     rawData: input => {
       if (input.rawData) {
         return input.rawData;
@@ -58,12 +37,7 @@ const pulls = JM.makeConverter({
 });
 
 const issues = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
     number: ['number', h.toString],
     state: 'state',
@@ -111,12 +85,7 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
     message: input => {
       return Utils.prepareString4StarWS(`m:${input.message}`);
