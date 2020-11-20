@@ -31,12 +31,13 @@ const isTokenExpired = () => {
 
 const authenticate = async () => {
   try {
-    if (!isTokenExpired()) {
-      return true;
-    }
+    // if (!isTokenExpired()) {
+    //   return true;
+    // }
 
     const headers = {
       'content-type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded',
     };
     const response = await httpClient.post(
       starwsConfig.endpoints.auth,
@@ -49,8 +50,13 @@ const authenticate = async () => {
       env.starwsAuth = response.data;
       env.starwsAuth.token_generation_time = moment();
       httpClient.addAccessToken(env.starwsAuth.access_token);
+      logger.info(
+        `Authentication successfully! ${env.starwsAuth.access_token}`,
+      );
+    } else {
+      logger.info(`Something wrong.`);
+      logger.info(response);
     }
-    logger.info(`Authentication successfully!`);
     return true;
   } catch (err) {
     logger.error(`Authentication failure! msg: ${err}`);
@@ -107,13 +113,17 @@ const saveJSONData = async data => {
   try {
     const response = await httpClient.post(endPoint, data);
     if (response.status === 200 && response.data) {
-      logger.info(`POST Request to save JSON data in JSON-Data-API successfully!`);
+      logger.info(
+        `POST Request to save JSON data in JSON-Data-API successfully!`,
+      );
       return response.data;
     }
     logger.error(`POST Request to save JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    logger.error(`POST Request to save JSON data in JSON-Data-API failure! ${e}`);
+    logger.error(
+      `POST Request to save JSON data in JSON-Data-API failure! ${e}`,
+    );
     return e.response;
   }
   return false;
@@ -126,9 +136,11 @@ const getJSONData = async url => {
   }
 
   try {
-    const response = await httpClient.get({path: url, isFullURL: true});
+    const response = await httpClient.get({ path: url, isFullURL: true });
     if (response.status === 200 && response.data) {
-      logger.info(`GET Request to get JSON data in JSON-Data-API successfully!`);
+      logger.info(
+        `GET Request to get JSON data in JSON-Data-API successfully!`,
+      );
       return response.data;
     }
     logger.error(`GET Request to get JSON data in JSON-Data-API failure!`);

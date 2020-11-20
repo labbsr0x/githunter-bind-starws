@@ -11,9 +11,20 @@ const metrics = async (req, res) => {
     endDateTime,
   });
 
-  if (!starwsResp.data || !starwsResp.data.data || starwsResp.data.data.length === 0) {
+  if (
+    !starwsResp.data ||
+    !starwsResp.data.data ||
+    starwsResp.data.data.length === 0
+  ) {
     logger.info(`METRICS CONTROLLER: No content data.`);
     res.status(204).send();
+    return false;
+  }
+
+  if (starwsResp.data && !starwsResp.data.data) {
+    res
+      .status(starwsResp.status ? starwsResp.status : 500)
+      .send({ message: 'Unknown error', data: starwsResp.data });
     return false;
   }
 
