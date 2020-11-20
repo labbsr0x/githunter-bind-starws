@@ -4,20 +4,16 @@ const Utils = require('../utils');
 const h = JM.helpers;
 
 const pulls = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: input => Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
     number: ['number', h.toString],
-    state: 'state',
     createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
+    state: 'state',
     closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
     merged: ['merged', h.toString],
     mergedAt: input => Utils.dateFormat4StarWS(input.mergedAt),
-    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     labels: input => Utils.concatArray4StarWS(input.labels),
     totalParticipants: ['participants.totalCount', h.toString],
     participants: input => {
@@ -58,12 +54,7 @@ const pulls = JM.makeConverter({
 });
 
 const issues = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
     number: ['number', h.toString],
     state: 'state',
@@ -111,12 +102,7 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: Utils.dateFormat4StarWS(input.committedDate),
   fields: {
     message: input => {
       return Utils.prepareString4StarWS(`m:${input.message}`);
