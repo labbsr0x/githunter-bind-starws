@@ -54,7 +54,7 @@ const pulls = JM.makeConverter({
 });
 
 const issues = JM.makeConverter({
-  dateTime: Utils.dateFormat4StarWS(input.updatedAt),
+  dateTime: input => Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
     number: ['number', h.toString],
     state: 'state',
@@ -102,7 +102,7 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: Utils.dateFormat4StarWS(input.committedDate),
+  dateTime: input => Utils.dateFormat4StarWS(input.committedDate),
   fields: {
     message: input => {
       return Utils.prepareString4StarWS(`m:${input.message}`);
