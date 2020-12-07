@@ -1,5 +1,6 @@
 const { Ambassador } = require("node-ambassador");
 const logger = require("./config/winston");
+const starwsConfig = config.get('star-ws');
 
 const TARGET = process.env["target_port"] || 443;
 const PORT = process.env["port"] || 8080;
@@ -45,7 +46,7 @@ function Auth({ service }) {
 new Ambassador({
   port: PORT,
   target: TARGET,
-  targetServer: "https://agrows-data-api.labbs.com.br",
+  targetServer: starwsConfig.urlData,
 }).tunnel({
   override_404,
   telemetry,
