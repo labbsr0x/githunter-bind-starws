@@ -65,10 +65,6 @@ const authenticate = async () => {
 };
 
 const publishMetrics = async (provider, node, data) => {
-  const isAuthenticate = await authenticate();
-  if (!isAuthenticate) {
-    return false;
-  }
   let endPoint = starwsConfig.endpoints.publishMetrics;
 
   const route = new Route(endPoint);
@@ -85,10 +81,6 @@ const publishMetrics = async (provider, node, data) => {
 };
 
 const metrics = async (provider, node, params) => {
-  const isAuthenticate = await authenticate();
-  if (!isAuthenticate) {
-    return false;
-  }
   let endPoint = starwsConfig.endpoints.metrics;
 
   const route = new Route(endPoint);
@@ -105,10 +97,6 @@ const metrics = async (provider, node, params) => {
 };
 
 const saveJSONData = async data => {
-  const isAuthenticate = await authenticate();
-  if (!isAuthenticate) {
-    return false;
-  }
   const endPoint = starwsConfig.endpoints.jsonDataAPI;
   try {
     const response = await httpClient.post(endPoint, data);
@@ -126,15 +114,9 @@ const saveJSONData = async data => {
     );
     return e.response;
   }
-  return false;
 };
 
 const getJSONData = async url => {
-  const isAuthenticate = await authenticate();
-  if (!isAuthenticate) {
-    return false;
-  }
-
   try {
     const response = await httpClient.get({ path: url, isFullURL: true });
     if (response.status === 200 && response.data) {
