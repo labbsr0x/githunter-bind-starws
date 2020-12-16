@@ -37,13 +37,24 @@ const metrics = async (req, res) => {
   }
 
   // Get JSON Data
-  const rawDataPromise = [];
-  starwsResp.data.data.forEach((theData, index) => {
-    if (theData.attributes && theData.attributes.rawData)
-      rawDataPromise[index] = starws.getJSONData(theData.attributes.rawData);
+  const rawUrls = starwsResp.data.data.map((data) => {
+    if (data.attributes && data.attributes.rawData && data.attributes.rawData !== 'https://datajson/empty') {
+      return data.attributes.rawData;
+    }
   });
 
-  const rawDataValues = await Promise.all(rawDataPromise);
+  const rawDataValues = [];
+
+  await async.eachLimit(rawUrls, 10, (url, done) => {
+    starws.getJSONData(url)
+    .then((response) => {
+      if (response) {
+        rawDataValues.push(response);
+      }
+      return done();
+    })
+    .catch(err => logger.error(err));
+  });
 
   const data = [];
   starwsResp.data.data.forEach((item, index) => {
