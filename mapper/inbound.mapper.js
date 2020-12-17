@@ -156,33 +156,6 @@ const comments = JM.makeConverter({
   tags: {},
 });
 
-const comments = JM.makeConverter({
-  dateTime: input => Utils.dateFormat4StarWS(input.createdAt),
-  fields: {
-    url: 'url',
-    createdAt: data => Utils.dateFormat4StarWS(data.createdAt),
-    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
-    number: ['number', h.toString],
-    url: 'url',
-    id: 'id',
-    rawData: input => {
-      if (input.rawData) {
-        return input.rawData;
-      }
-      return `https://datajson/empty`;
-    },
-    dono: input => {
-      return `o:${input.owner}`;
-    },
-    name: input => {
-      return `n:${input.name}`;
-    },
-    provider: 'provider',
-    type: JM.helpers.def('comments'),
-  },
-  tags: {},
-});
-
 const userStats = JM.makeConverter({
   dateTime: input => {
     if (input.dateTime) {
