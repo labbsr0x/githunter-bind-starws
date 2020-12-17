@@ -33,6 +33,11 @@ const metrics = async (req, res) => {
     return false;
   }
 
+  if (starwsResp.status && starwsResp.status != 200) {
+    res.status(starwsResp.status).send({ message: 'Unknown error' });
+    return false;
+  }
+
   const maker = nodeMapper[node];
 
   if (!maker) {
