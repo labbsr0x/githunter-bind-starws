@@ -2,5 +2,5 @@
 set -e
 set -x
 
-echo "Starting GitHunter Ambassador..."
-node /app/githunter-starws.js 
+echo "Starting GitHunter Bind StarWS..."
+node /app/githunter-starws.js

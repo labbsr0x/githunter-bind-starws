@@ -6,19 +6,7 @@ services:
     image: githunter-starws:1.0
     container_name: starws
     restart: always
-    links:
-      - "starws_ambassador:starws"
     ports:
       - 3005
-    networks:
-      default: {}
-
-  starws_ambassador:
-    image: svendowideit/ambassador
-    ports:
-      - 5000:5000
-    environment:
-      STARTWS_PORT_5000_TCP: tcp://starws:3005
-    container_name: starws_ambassador
     networks:
       default: {}
