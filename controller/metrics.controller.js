@@ -1,4 +1,5 @@
 'use strict';
+const async = require('async');
 const starws = require('../services/star-ws/controller');
 const nodeMapper = require('../mapper/outbound.mapper');
 const logger = require('../config/logger');
