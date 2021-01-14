@@ -3,6 +3,7 @@ const qs = require('qs');
 const axios = require('axios').default;
 const starwsConfig = config.get('star-ws');
 const logger = require('../../config/logger');
+
 class Http {
   constructor({ url, headers, accessToken }) {
     headers = headers || { 'Content-type': 'application/json' };
@@ -20,6 +21,7 @@ class Http {
     if (accessToken) {
       this.addAccessToken(accessToken);
     }
+
   }
 
   async getToken() {
