@@ -1,9 +1,9 @@
-const qs = require('qs');
 const config = require('config');
+const qs = require('qs');
 const axios = require('axios').default;
+const starwsConfig = config.get('star-ws');
 const logger = require('../../config/logger');
 
-const starwsConfig = config.get('star-ws');
 class Http {
   constructor({ url, headers, accessToken }) {
     headers = headers || { 'Content-type': 'application/json' };
@@ -21,45 +21,7 @@ class Http {
     if (accessToken) {
       this.addAccessToken(accessToken);
     }
-    let isRefreshing = false;
-    let refreshSubscribers = [];
-    function subscribeTokenRefresh(cb) {
-      refreshSubscribers.push(cb);
-    }
 
-    function onRrefreshed(token) {
-      refreshSubscribers.map(cb => cb(token));
-    }
-    this.service.interceptors.response.use((response) => {
-      return response
-    }, async (error) => {
-      logger.error(`URL: ${error.config.url}`);
-      const { config, response: { status } } = error;
-      const originalRequest = config;
-
-      if (status === 401) {
-        if (!isRefreshing) {
-          isRefreshing = true;
-          this.getToken()
-            .then(newToken => {
-              isRefreshing = false;
-              onRrefreshed(newToken);
-              this.service.defaults.headers.common['Authorization'] = 'Bearer ' + newToken;
-            });
-        }
-
-        const retryOrigReq = new Promise((resolve, reject) => {
-          subscribeTokenRefresh(token => {
-            // replace the expired token and retry
-            originalRequest.headers['Authorization'] = 'Bearer ' + token;
-            resolve(axios(originalRequest));
-          });
-        });
-        return retryOrigReq;
-      }
-      return Promise.reject(error)
-    }
-    );
   }
 
   async getToken() {
@@ -86,7 +48,7 @@ class Http {
       logger.error(`Authentication failure! msg: ${err}`);
       return false;
     }
-  };
+  }
 
   addAccessToken(accessToken) {
     this.service.interceptors.request.use(config => {

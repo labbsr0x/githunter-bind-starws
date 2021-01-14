@@ -130,12 +130,7 @@ const commits = JM.makeConverter({
 });
 
 const userStats = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: input => Utils.dateFormat4StarWS(input.dateTime),
   fields: {
     name: ['name', h.toString],
     login: ['login', h.toString],
@@ -161,12 +156,7 @@ const userStats = JM.makeConverter({
 });
 
 const repositoryStats = JM.makeConverter({
-  dateTime: input => {
-    if (input.dateTime) {
-      return input.dateTime;
-    }
-    return Utils.nanoSeconds();
-  },
+  dateTime: input => Utils.dateFormat4StarWS(input.dateTime),
   fields: {
     frequency: ['frequency', h.toString],
     definitionOSS: ['definitionOSS', h.toString],

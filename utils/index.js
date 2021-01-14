@@ -17,15 +17,10 @@ const utils = (() => {
         return moment(0).format();
       }
 
-      // Getting nano sec to avoid duplicate dateTime
-      const hrTime = process.hrtime();
-      const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
-      const nSec = nTime.substr(nTime.length - 5);
-
       logger.debug(
         `UTILS dateFormat4StarWS: Formatted data to StarWS successfully!`,
       );
-      return theDate.format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
+      return theDate.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
     },
 
     dateFormat4Githunter: date => {
@@ -87,14 +82,6 @@ const utils = (() => {
         `UTILS concatArray4StarWS: Array concatenated to StarWS successfully!`,
       );
       return str.substring(0, shortStringLen);
-    },
-    nanoSeconds: () => {
-      const hrTime = process.hrtime();
-      const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
-      const nSec = nTime.substr(nTime.length - 5);
-
-      logger.debug(`UTIL nanoSeconds: Nanosecond gerated successfully!`);
-      return moment().format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
     },
   };
 })();
