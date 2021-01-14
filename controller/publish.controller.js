@@ -27,8 +27,8 @@ const publish = async (req, res) => {
     if (starwsResp) {
       res.status(starwsResp.status).send(starwsResp.data);
     } else {
-      logger.error(`PUBLISH CONTROLLER: Error publishing data.`);
-      res.status(500).send({ message: 'Error publishing data.' });
+      logger.error(`PUBLISH CONTROLLER: Error publishing formatted data.`);
+      res.status(500).send({ message: 'Error publishing formatted data.' });
     }
     return false;
   } else if (checksum != 0 && checksum != sourceData.length) {
@@ -67,7 +67,7 @@ const publish = async (req, res) => {
     if (rawDataValues){
       d = {
         ...item,
-        rawData: rawDataValues[index].link
+        rawData: rawDataValues[index]? rawDataValues[index].link : ''
       }
     }
     data.push(theMaker(d));

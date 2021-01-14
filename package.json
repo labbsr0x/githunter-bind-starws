@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "json-mapper": "0.0.12",
+    "lodash": "^4.17.20",
     "moment": "^2.29.0",
     "qs": "^6.9.4",
     "route-parser": "0.0.5",

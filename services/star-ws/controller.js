@@ -25,15 +25,16 @@ const isTokenExpired = () => {
   let expires = expiresIn - renewTokenInMinute;
   expires = expires > 0 ? renewTokenInMinute : expiresIn;
 
-  const expiresDatetime = moment().add(expires, 'minutes');
-  return tokenGenerationTime.isAfter(expiresDatetime);
+  const expiresDatetime = moment(tokenGenerationTime).add(expires, 'minutes');
+
+  return moment().isAfter(expiresDatetime);
 };
 
 const authenticate = async () => {
   try {
-    // if (!isTokenExpired()) {
-    //   return true;
-    // }
+    if (!isTokenExpired()) {
+      return true;
+    }
 
     const headers = {
       'content-type': 'application/x-www-form-urlencoded',
@@ -63,6 +64,9 @@ const authenticate = async () => {
     return false;
   }
 };
+
+authenticate();
+setInterval(authenticate, 30000);
 
 const publishMetrics = async (provider, node, data) => {
   let endPoint = starwsConfig.endpoints.publishMetrics;
