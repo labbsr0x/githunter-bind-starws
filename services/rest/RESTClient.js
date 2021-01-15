@@ -3,7 +3,6 @@ const qs = require('qs');
 const axios = require('axios').default;
 const starwsConfig = config.get('star-ws');
 const logger = require('../../config/logger');
-
 class Http {
   constructor({ url, headers, accessToken }) {
     headers = headers || { 'Content-type': 'application/json' };
@@ -18,10 +17,16 @@ class Http {
       headers,
     });
 
+    this.accessToken = '';
     if (accessToken) {
-      this.addAccessToken(accessToken);
+      this.accessToken = accessToken;
     }
 
+    this.service.interceptors.request.use(config => {
+      if (this.accessToken)
+        config.headers.Authorization = `Bearer ${this.accessToken}`;
+      return config;
+    });
   }
 
   async getToken() {
@@ -51,10 +56,7 @@ class Http {
   }
 
   addAccessToken(accessToken) {
-    this.service.interceptors.request.use(config => {
-      config.headers.common.Authorization = `Bearer ${accessToken}`;
-      return config;
-    });
+    this.accessToken = accessToken;
   }
 
   get({ path, params, headers, isFullURL = false }) {
