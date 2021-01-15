@@ -46,7 +46,7 @@ const utils = (() => {
         logger.debug(`UTILS prepareString4StarWS: String content is invalid!`);
         return data;
       }
-      const d = data.substring(0, shortStringLen);
+      const d = data.replace(/(\r\n|\n|\r)/gm, '').substring(0, shortStringLen);
       logger.debug(`UTILS prepareString4StarWS: ${data} -> ${d}`);
       return d;
     },

@@ -12,7 +12,7 @@
       "client_secret": "b874aa02-4333-4a4a-be10-55b44fc94eb3",
       "grant_type": "client_credentials"
     },
-    "renewTokenInMinute": 800,
+    "renewTokenInMinute": 60,
     "endpoints": {
       "auth": "/auth/realms/agrows/protocol/openid-connect/token",
       "publishMetrics": "/v1/owner/githunter-beta/thing/:provider/node/:node",

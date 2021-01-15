@@ -16,7 +16,9 @@ const isTokenExpired = () => {
   // Fist time for authentication
   if (!env.starwsAuth) return true;
 
-  const expiresIn = env.starwsAuth.expires_in; // exipires minutes at server
+  const expiresIn = env.starwsAuth.expires_in
+    ? env.starwsAuth.expires_in / 60
+    : 0; // exipires minutes at server
   const { renewTokenInMinute } = starwsConfig; // should renew token in minute
   const tokenGenerationTime = env.starwsAuth.token_generation_time; // last token generation
 
