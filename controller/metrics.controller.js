@@ -8,10 +8,21 @@ const logger = require('../config/logger');
 
 const metrics = async (req, res) => {
   const { provider, node, startDateTime, endDateTime } = req.query;
+  const { filters } = req.body;
+
+  let filter = '';
+  if (filters && filters.length > 0) {
+    filters.forEach(tag => {
+      Object.getOwnPropertyNames(tag).forEach(value => {
+        filter = filter.concat(`${value}:${tag[value]},`);
+      })
+    });
+  }
 
   const starwsResp = await starws.metrics(provider, node, {
     startDateTime,
     endDateTime,
+    filter,
   });
 
   if (

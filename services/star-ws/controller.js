@@ -91,7 +91,7 @@ const metrics = async (provider, node, params) => {
 
   const route = new Route(endPoint);
   endPoint = route.reverse({ provider, node });
-
+  
   try {
     const response = await httpClient.get({ path: endPoint, params });
     logger.info(`GET Request for path /metrics successfully executed!`);
