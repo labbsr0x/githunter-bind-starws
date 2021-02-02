@@ -10,7 +10,10 @@ const metrics = async (req, res) => {
   const { provider, node, startDateTime, endDateTime } = req.query;
   const { filters } = req.body;
 
-  const filter = filters.map(item => Object.keys(item).map(key => `${key}:${item[key]}`)).join();
+  let filter = '';
+  if (filters) {
+    filter = filters.map(item => Object.keys(item).map(key => `${key}:${item[key]}`)).join();
+  }
 
   const starwsResp = await starws.metrics(provider, node, {
     startDateTime,
