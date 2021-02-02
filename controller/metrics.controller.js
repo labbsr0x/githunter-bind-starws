@@ -15,11 +15,16 @@ const metrics = async (req, res) => {
     filter = filters.map(item => Object.keys(item).map(key => `${key}:${item[key]}`)).join();
   }
 
-  const starwsResp = await starws.metrics(provider, node, {
-    startDateTime,
-    endDateTime,
-    filter,
-  });
+  const starwsResp = await starws.metrics(provider, node, 
+    filter ? {
+      startDateTime,
+      endDateTime,
+      filter,
+    } : {
+      startDateTime,
+      endDateTime
+    }
+  );
 
   if (
     starwsResp &&
