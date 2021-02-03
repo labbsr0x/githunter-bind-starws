@@ -6,11 +6,8 @@ const h = JM.helpers;
 const pulls = JM.makeConverter({
   dateTime: input => Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
-    number: ['number', h.toString],
     createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
-    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
-    state: 'state',
     closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
     merged: ['merged', h.toString],
     mergedAt: input => Utils.dateFormat4StarWS(input.mergedAt),
@@ -39,6 +36,13 @@ const pulls = JM.makeConverter({
       }
       return `https://datajson/empty`;
     },
+    type: JM.helpers.def('pull'),
+  },
+  tags: {
+    category: JM.helpers.def('CXF'),
+    number: ['number', h.toString],
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    state: 'state',
     dono: input => {
       return `o:${input.owner}`;
     },
@@ -46,22 +50,15 @@ const pulls = JM.makeConverter({
       return `n:${input.name}`;
     },
     provider: 'provider',
-    type: JM.helpers.def('pull'),
-  },
-  tags: {
-    category: JM.helpers.def('CXF'),
   },
 });
 
 const issues = JM.makeConverter({
   dateTime: input => Utils.dateFormat4StarWS(input.updatedAt),
   fields: {
-    number: ['number', h.toString],
-    state: 'state',
     createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
     closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
     updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
-    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     labels: input => Utils.concatArray4StarWS(input.labels),
     participantsTotalCount: ['participants.totalCount', h.toString],
     participants: input => {
@@ -87,6 +84,13 @@ const issues = JM.makeConverter({
       }
       return `https://datajson/empty`;
     },
+    type: JM.helpers.def('issues'),
+  },
+  tags: {
+    category: JM.helpers.def('CXF'),
+    number: ['number', h.toString],
+    state: 'state',
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     dono: input => {
       return `o:${input.owner}`;
     },
@@ -94,10 +98,6 @@ const issues = JM.makeConverter({
       return `n:${input.name}`;
     },
     provider: 'provider',
-    type: JM.helpers.def('issues'),
-  },
-  tags: {
-    category: JM.helpers.def('CXF'),
   },
 });
 
@@ -108,13 +108,17 @@ const commits = JM.makeConverter({
       return Utils.prepareString4StarWS(`m:${input.message}`);
     },
     committedDate: data => Utils.dateFormat4StarWS(data.committedDate),
-    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     rawData: input => {
       if (input.rawData) {
         return input.rawData;
       }
       return `https://datajson/empty`;
     },
+    type: JM.helpers.def('commits'),
+  },
+  tags: {
+    category: JM.helpers.def('CXF'),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
     dono: input => {
       return `o:${input.owner}`;
     },
@@ -122,18 +126,12 @@ const commits = JM.makeConverter({
       return `n:${input.name}`;
     },
     provider: 'provider',
-    type: JM.helpers.def('commits'),
-  },
-  tags: {
-    category: JM.helpers.def('CXF'),
   },
 });
 
 const userStats = JM.makeConverter({
   dateTime: input => Utils.dateFormat4StarWS(input.dateTime),
   fields: {
-    name: ['name', h.toString],
-    login: ['login', h.toString],
     avatarUrl: 'avatarUrl',
     contributedRepositories: ['amount.contributedRepositories', h.toString],
     commits: ['amount.commits', h.toString],
@@ -147,11 +145,13 @@ const userStats = JM.makeConverter({
       return `https://datajson/empty`;
     },
     followers: ['amount.followers', h.toString],
-    provider: 'provider',
     type: JM.helpers.def('userStats'),
   },
   tags: {
     category: JM.helpers.def('CXF'),
+    name: ['name', h.toString],
+    login: ['login', h.toString],
+    provider: 'provider',
   },
 });
 
@@ -169,6 +169,10 @@ const repositoryStats = JM.makeConverter({
       }
       return `https://datajson/empty`;
     },
+    type: JM.helpers.def('repositoryStats'),
+  },
+  tags: {
+    category: JM.helpers.def('CXF'),
     dono: input => {
       return `o:${input.owner}`;
     },
@@ -176,10 +180,6 @@ const repositoryStats = JM.makeConverter({
       return `n:${input.name}`;
     },
     provider: 'provider',
-    type: JM.helpers.def('repositoryStats'),
-  },
-  tags: {
-    category: JM.helpers.def('CXF'),
   },
 });
 
