@@ -15,8 +15,8 @@
     "renewTokenInMinute": 60,
     "endpoints": {
       "auth": "/auth/realms/agrows/protocol/openid-connect/token",
-      "publishMetrics": "/v1/owner/githunter-beta/thing/:provider/node/:node",
-      "metrics": "/v1/owner/githunter-beta/thing/:provider/node/:node",
+      "publishMetrics": "/v1/owner/githunter-betav2/thing/:provider/node/:node",
+      "metrics": "/v1/owner/githunter-betav2/thing/:provider/node/:node",
       "jsonDataAPI": "/v1/files/upload/jsondata"
     }
   }
