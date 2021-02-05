@@ -82,7 +82,7 @@ const publishMetrics = async (provider, node, data) => {
     return response;
   } catch (e) {
     logger.error(`POST Request for path /publish failure! ${e}`);
-    return e.response;
+    throw e;
   }
 };
 
@@ -91,7 +91,7 @@ const metrics = async (provider, node, params) => {
 
   const route = new Route(endPoint);
   endPoint = route.reverse({ provider, node });
-  
+
   try {
     const response = await httpClient.get({ path: endPoint, params });
     logger.info(`GET Request for path /metrics successfully executed!`);

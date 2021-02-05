@@ -13,7 +13,7 @@ class Http {
 
     this.service = axios.create({
       url,
-      timeout: 30000,
+      timeout: 120000,
       headers,
     });
 
@@ -27,32 +27,6 @@ class Http {
         config.headers.Authorization = `Bearer ${this.accessToken}`;
       return config;
     });
-  }
-
-  async getToken() {
-    try {
-      const headers = {
-        'content-type': 'application/x-www-form-urlencoded',
-      };
-      const response = await this.post(
-        starwsConfig.endpoints.auth,
-        qs.stringify(starwsConfig.authParams),
-        headers,
-        starwsConfig.urlAuth,
-      );
-      if (response && response.data) {
-        logger.info(
-          `Successful authentication by HttpClient -> ${response.data.access_token}`,
-        );
-        return response.data.access_token;
-      } else {
-        logger.info(`Something wrong.`);
-        logger.info(response);
-      }
-    } catch (err) {
-      logger.error(`Authentication failure! msg: ${err}`);
-      return false;
-    }
   }
 
   addAccessToken(accessToken) {
