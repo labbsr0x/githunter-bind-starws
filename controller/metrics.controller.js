@@ -11,7 +11,7 @@ const metrics = async (req, res) => {
   const { filters } = req.body;
 
   let filter = '';
-  if (filters?.length > 0) {
+  if (filters && filters.length > 0) {
     filter = filters.map(item => Object.keys(item).map(key => `${key}:${item[key]}`)).join();
   }
 

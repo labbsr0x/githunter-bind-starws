@@ -59,7 +59,7 @@ const issues = JM.makeConverter({
     createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
     closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
     updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
-    labels: input => Utils.concatArray4StarWS(input.labels),
+    labels: input => Utils.concatArray4StarWS(`l:${input.author}`),
     participantsTotalCount: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
@@ -183,10 +183,40 @@ const repositoryStats = JM.makeConverter({
   },
 });
 
+const comments = JM.makeConverter({
+  dateTime: input => Utils.dateFormat4StarWS(input.createdAt),
+  fields: {
+    url: 'url',
+    createdAt: data => Utils.dateFormat4StarWS(data.createdAt),
+    number: ['number', h.toString],
+    url: 'url',
+    id: 'id',
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
+    },
+    type: JM.helpers.def('comments'),
+  },
+  tags: {
+    category: JM.helpers.def('CXF'),
+    dono: input => {
+      return `o:${input.owner}`;
+    },
+    name: input => {
+      return `n:${input.name}`;
+    },
+    provider: 'provider',
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+  },
+});
+
 module.exports = {
   pulls,
   issues,
   commits,
   userStats,
   repositoryStats,
+  comments,
 };
