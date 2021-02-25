@@ -5,13 +5,13 @@ const h = JM.helpers;
 
 const pulls = JM.makeConverter({
   dateTime: 'dateTime',
-  number: ['attributes.number', h.toNumber],
-  state: 'attributes.state',
+  number: ['tags.number', h.toNumber],
+  state: 'tags.state',
   createdAt: input => Utils.dateFormat4Githunter(input.attributes.createdAt),
   closedAt: input => Utils.dateFormat4Githunter(input.attributes.closedAt),
   merged: ['attributes.merged', h.toString],
   mergedAt: input => Utils.dateFormat4Githunter(input.attributes.mergedAt),
-  author: 'attributes.author',
+  author: 'tags.author',
   labels: 'attributes.labels',
   participantsTotalCount: ['attributes.participants.totalCount', h.toNumber],
   participants: 'attributes.participants',
@@ -20,20 +20,20 @@ const pulls = JM.makeConverter({
     Utils.dateFormat4Githunter(input.attributes.comments.updatedAt),
   comments: 'attributes.comments',
   rawData: 'attributes.rawData',
-  owner: input => Utils.prepareString4Githunter(input.attributes.dono),
-  name: input => Utils.prepareString4Githunter(input.attributes.name),
-  provider: 'attributes.provider',
+  owner: input => Utils.prepareString4Githunter(input.tags.dono),
+  name: input => Utils.prepareString4Githunter(input.tags.name),
+  provider: 'tags.provider',
   type: 'attributes.type',
 });
 
 const issues = JM.makeConverter({
   dateTime: 'dateTime',
-  number: ['attributes.number', h.toNumber],
-  state: 'attributes.state',
+  number: ['tags.number', h.toNumber],
+  state: 'tags.state',
   createdAt: input => Utils.dateFormat4Githunter(input.attributes.createdAt),
   closedAt: input => Utils.dateFormat4Githunter(input.attributes.closedAt),
   updatedAt: input => Utils.dateFormat4Githunter(input.attributes.updatedAt),
-  author: 'attributes.author',
+  author: 'tags.author',
   labels: 'attributes.labels',
   participantsTotalCount: ['attributes.participants.totalCount', h.toNumber],
   participants: 'attributes.participants',
@@ -42,9 +42,9 @@ const issues = JM.makeConverter({
     Utils.dateFormat4Githunter(input.attributes.comments.updatedAt),
   comments: 'attributes.comments',
   rawData: 'attributes.rawData',
-  owner: input => Utils.prepareString4Githunter(input.attributes.dono),
-  name: input => Utils.prepareString4Githunter(input.attributes.name),
-  provider: 'attributes.provider',
+  owner: input => Utils.prepareString4Githunter(input.tags.dono),
+  name: input => Utils.prepareString4Githunter(input.tags.name),
+  provider: 'tags.provider',
   type: 'attributes.type',
 });
 
@@ -53,18 +53,18 @@ const commits = JM.makeConverter({
   message: 'attributes.message',
   committedDate: data =>
     Utils.dateFormat4Githunter(data.attributes.committedDate),
-  author: 'attributes.author',
+  author: 'tags.author',
   rawData: 'attributes.rawData',
-  owner: input => Utils.prepareString4Githunter(input.attributes.dono),
-  name: input => Utils.prepareString4Githunter(input.attributes.name),
-  provider: 'attributes.provider',
+  owner: input => Utils.prepareString4Githunter(input.tags.dono),
+  name: input => Utils.prepareString4Githunter(input.tags.name),
+  provider: 'tags.provider',
   type: 'attributes.type',
 });
 
 const userStats = JM.makeConverter({
   dateTime: 'dateTime',
-  name: ['attributes.name', h.toString],
-  login: ['attributes.login', h.toString],
+  name: ['tags.name', h.toString],
+  login: ['tags.login', h.toString],
   avatarUrl: 'avatarUrl',
   contributedRepositories: [
     'attributes.amount.contributedRepositories',
@@ -76,21 +76,21 @@ const userStats = JM.makeConverter({
   starsReceived: ['attributes.amount.starsReceived', h.toNumber],
   followers: ['attributes.amount.followers', h.toNumber],
   rawData: 'attributes.rawData',
-  provider: 'attributes.provider',
+  provider: 'tags.provider',
   type: 'attributes.type',
 });
 
 const repositoryStats = JM.makeConverter({
   dateTime: 'dateTime',
-  owner: input => Utils.prepareString4Githunter(input.attributes.dono),
-  name: input => Utils.prepareString4Githunter(input.attributes.name),
+  owner: input => Utils.prepareString4Githunter(input.tags.dono),
+  name: input => Utils.prepareString4Githunter(input.tags.name),
   frequency: ['attributes.frequency', h.toNumber],
   definitionOSS: ['attributes.definitionOSS', h.toNumber],
   popularity: ['attributes.popularity', h.toNumber],
   friendly: ['attributes.friendly', h.toNumber],
   quality: ['attributes.quality', h.toNumber],
   rawData: 'attributes.rawData',
-  provider: 'attributes.provider',
+  provider: 'tags.provider',
   type: 'attributes.type',
 });
 

@@ -1,0 +1,14 @@
+{
+  "star-ws": {
+    "urlAuth": "https://agrows-keycloak-r3.labbs.com.br",
+    "urlData": "http://data-api:8000",
+    "authParams": {
+      "client_id": "500bda29-7dce-439b-9126-aa25cd1cdf53",
+      "client_secret": "ec5aba40-8864-4eb0-af34-33a5199cb5c5"
+    },
+    "endpoints": {
+      "publishMetrics": "/v1/owner/githunter/thing/:provider/node/:node",
+      "metrics": "/v1/owner/githunter/thing/:provider/node/:node"
+    }
+  }
+}
