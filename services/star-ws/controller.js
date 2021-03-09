@@ -97,15 +97,22 @@ const metrics = async (provider, node, params) => {
     logger.info(`GET Request for path /metrics successfully executed!`);
     return response;
   } catch (e) {
-    logger.error(`GET Request for path /metrics failure! ${e}`);
-    return e.response;
+    const msg = e && e.response ? e.response : e;
+    logger.error(`GET Request for path /metrics failure!`);
+    logger.error(msg);
+    return msg;
   }
 };
 
-const saveJSONData = async data => {
-  const endPoint = starwsConfig.endpoints.jsonDataAPI;
+const saveJSONData = async (provider, node, data) => {
+  const url = starwsConfig.urlFileData;
+  let endPoint = starwsConfig.endpoints.jsonDataAPI;
+
+  const route = new Route(endPoint);
+  endPoint = route.reverse({ provider, node });
+
   try {
-    const response = await httpClient.post(endPoint, data);
+    const response = await httpClient.post(endPoint, data, {}, url);
     if (response.status === 200 && response.data) {
       logger.info(
         `POST Request to save JSON data in JSON-Data-API successfully!`,
@@ -115,10 +122,10 @@ const saveJSONData = async data => {
     logger.error(`POST Request to save JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    logger.error(
-      `POST Request to save JSON data in JSON-Data-API failure! ${e}`,
-    );
-    return e.response;
+    const msg = e && e.response ? e.response : e;
+    logger.error(`POST Request to save JSON data in JSON-Data-API failure!`);
+    logger.error(msg);
+    return msg;
   }
 };
 
@@ -134,8 +141,10 @@ const getJSONData = async url => {
     logger.error(`GET Request to get JSON data in JSON-Data-API failure!`);
     return false;
   } catch (e) {
-    logger.error(`GET Request to get JSON data in JSON-Data-API failure! ${e}`);
-    return e.response;
+    const msg = e && e.response ? e.response : e;
+    logger.error(`GET Request to get JSON data in JSON-Data-API failure!`);
+    logger.error(msg);
+    return msg;
   }
 };
 
