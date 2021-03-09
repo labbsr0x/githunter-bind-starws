@@ -49,11 +49,11 @@ const publish = async (req, res) => {
 
     // TODO: Means that is not formatted, lets mapper it
     let rawDataValues;
-    if (createRawData) {
+    if (createRawData === true || createRawData === 'true') {
       // Save JSON Data
       const rawDataPromise = [];
       sourceData.forEach((theData, index) => {
-        rawDataPromise[index] = starws.saveJSONData(theData);
+        rawDataPromise[index] = starws.saveJSONData(provider, 'json', theData);
       });
 
       rawDataValues = await Promise.all(rawDataPromise);
@@ -89,6 +89,7 @@ const publish = async (req, res) => {
     }
   } catch (e) {
     logger.error(`PUBLISH CONTROLLER: Error publishing data.`);
+    logger.error(e);
     res.status(500).send({
       message: e && e.message ? e.message : 'Error publishing data.',
       config: e && e.config ? e.config : undefined,

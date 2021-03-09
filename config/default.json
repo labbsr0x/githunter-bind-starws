@@ -20,5 +20,8 @@
       "metrics": "/v1/owner/githunter/thing/:provider/node/:node",
       "jsonDataAPI": "/v1/files/upload/owner/githunter/thing/:provider/node/:node"
     }
+  },
+  "logger": {
+    "level": "info"
   }
 }
