@@ -7,6 +7,7 @@
   "star-ws": {
     "urlAuth": "https://agrows-keycloak.labbs.com.br",
     "urlData": "https://agrows.labbs.com.br/data-api",
+    "urlFileData": "https://file-api.labbs.com.br",
     "authParams": {
       "client_id": "07bd2676-f950-48c0-8b12-ebd5e8b1491d",
       "client_secret": "b874aa02-4333-4a4a-be10-55b44fc94eb3",
@@ -17,7 +18,7 @@
       "auth": "/auth/realms/agrows/protocol/openid-connect/token",
       "publishMetrics": "/v1/owner/githunter/thing/:provider/node/:node",
       "metrics": "/v1/owner/githunter/thing/:provider/node/:node",
-      "jsonDataAPI": "/v1/files/upload/jsondata"
+      "jsonDataAPI": "/v1/files/upload/owner/githunter/thing/:provider/node/:node"
     }
   }
 }

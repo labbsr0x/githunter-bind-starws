@@ -15,7 +15,7 @@ const init = middlewares => {
   router.post('/publish/provider/:provider/node/:node', publishController);
   router.get('/metrics', metricsController);
 
-  router.post('/upload/jsondata', jsonDataController);
+  router.post('/upload/provider/:provider/node/:node', jsonDataController);
 
   return router;
 };
