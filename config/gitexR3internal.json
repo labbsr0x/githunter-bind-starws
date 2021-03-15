@@ -2,7 +2,10 @@
   "star-ws": {
     "urlAuth": "https://agrows-keycloak-r3.labbs.com.br",
     "urlData": "http://data-api:8000",
-    "urlFileData": "http://api:8000",
+    "urlFileData": "http://agrowsfileapi:8000",
+    "headers": {
+      "X-User-Email": "githunter@bb.com.br"
+    },
     "authParams": {
       "client_id": "68ad68f9-14ac-46ea-9fc8-c281ad126470",
       "client_secret": "db50ec42-074d-4f26-b55c-697dae23ced2"

@@ -9,6 +9,7 @@ const logger = require('../../config/logger');
 const starwsConfig = config.get('star-ws');
 const httpClient = new HttpClient({
   url: starwsConfig.urlData,
+  headers: starwsConfig.headers
 });
 
 // TODO: Use percentage of expires_in
