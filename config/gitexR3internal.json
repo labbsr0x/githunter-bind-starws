@@ -11,8 +11,10 @@
       "client_secret": "db50ec42-074d-4f26-b55c-697dae23ced2"
     },
     "endpoints": {
-      "publishMetrics": "/v1/owner/githunter/thing/:provider/node/:node",
-      "metrics": "/v1/owner/githunter/thing/:provider/node/:node"
+      "publishMetrics": "/v1/owner/githunter-v1/thing/:provider/node/:node",
+      "metrics": "/v1/owner/githunter-v1/thing/:provider/node/:node",
+      "jsonDataAPI": "/v1/files/upload/owner/githunter-v1/thing/:provider/node/:node",
+      "thing": "/v1/owner/githunter-v1/thing"
     }
   }
 }

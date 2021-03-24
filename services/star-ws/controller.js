@@ -9,7 +9,7 @@ const logger = require('../../config/logger');
 const starwsConfig = config.get('star-ws');
 const httpClient = new HttpClient({
   url: starwsConfig.urlData,
-  headers: starwsConfig.headers
+  headers: starwsConfig.headers,
 });
 
 // TODO: Use percentage of expires_in
@@ -149,9 +149,29 @@ const getJSONData = async url => {
   }
 };
 
+const getThings = async params => {
+  const endPoint = starwsConfig.endpoints.thing;
+
+  try {
+    const response = await httpClient.get({ path: endPoint, params });
+    logger.info(`GET Request for path getThings successfully executed!`);
+    if (response && response.data && response.data.code == 'OK') {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.error);
+  } catch (e) {
+    const msg = e && e.response ? e.response : e;
+    logger.error(`GET Request for path getThings failure!`);
+    logger.error(msg);
+    return msg;
+  }
+};
+
 module.exports = {
   publishMetrics,
   metrics,
   saveJSONData,
   getJSONData,
+  getThings,
 };

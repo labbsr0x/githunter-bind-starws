@@ -10,7 +10,8 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/githunter-starws.js",
-      "outputCapture": "std"
+      "outputCapture": "std",
+      "env": {"NODE_ENV": "development"}
     }
   ]
 }

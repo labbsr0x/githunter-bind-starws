@@ -1,11 +1,11 @@
-FROM mhart/alpine-node:12
+FROM node:15.8.0-buster
 
 WORKDIR /app
 COPY package.json package-lock.json ./
 
 RUN npm install --production
 
-FROM mhart/alpine-node:slim-12
+FROM node:15.8.0-buster
 
 WORKDIR /app
 COPY --from=0 /app .
