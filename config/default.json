@@ -21,7 +21,8 @@
       "auth": "/auth/realms/agrows/protocol/openid-connect/token",
       "publishMetrics": "/v1/owner/githunter/thing/:provider/node/:node",
       "metrics": "/v1/owner/githunter/thing/:provider/node/:node",
-      "jsonDataAPI": "/v1/files/upload/owner/githunter/thing/:provider/node/:node"
+      "jsonDataAPI": "/v1/files/upload/owner/githunter/thing/:provider/node/:node",
+      "thing": "/v1/owner/githunter/thing"
     }
   },
   "logger": {
