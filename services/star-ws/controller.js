@@ -139,11 +139,11 @@ const getJSONData = async url => {
       );
       return response.data;
     }
-    logger.error(`GET Request to get JSON data in JSON-Data-API failure!`);
+    logger.error(`GET Request to get JSON data in JSON-Data-API failure! ${url}`);
     return false;
   } catch (e) {
     const msg = e && e.response ? e.response : e;
-    logger.error(`GET Request to get JSON data in JSON-Data-API failure!`);
+    logger.error(`GET Request to get JSON data in JSON-Data-API exception! ${url}`);
     logger.error(msg);
     return msg;
   }

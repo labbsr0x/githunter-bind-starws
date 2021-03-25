@@ -6,6 +6,19 @@ const starws = require('../services/star-ws/controller');
 const nodeMapper = require('../mapper/outbound.mapper');
 const logger = require('../config/logger');
 
+String.prototype.hashCode = function () {
+  var hash = 0,
+    i,
+    chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+
 const metrics = async (req, res) => {
   try {
     const { node, startDateTime, endDateTime } = req.query;
@@ -90,7 +103,7 @@ const metrics = async (req, res) => {
     }
 
     // Get JSON Data
-    const rawUrls = starwsResp.data.data.map(data => {
+    let rawUrls = starwsResp.data.data.map(data => {
       if (
         data.attributes &&
         data.attributes.rawData &&
@@ -100,27 +113,25 @@ const metrics = async (req, res) => {
       }
     });
 
-    const rawDataValues = [];
+    let rawDataValues = new Map();
 
-    // Limiting to 10 per time the request to client (infra problem)
-    await async.eachLimit(rawUrls, 1000, (url, done) => {
-      starws
-        .getJSONData(url)
-        .then(response => {
-          if (response) {
-            rawDataValues.push(response);
-          }
-          return done();
-        })
-        .catch(err => logger.error(err));
-    });
+    let emptyTimes = 0;
+    while (rawUrls.length > 0 && emptyTimes < 10) {
+      const { failsRawUrls, rawData } = await loadRawData(rawUrls);
+      if (rawData.size > 0) {
+        rawDataValues = _.merge(rawDataValues, rawData);
+      }
+      rawUrls = failsRawUrls;
+      emptyTimes++;
+    }
 
     const data = [];
-    starwsResp.data.data.forEach((item, index) => {
+    starwsResp.data.data.forEach(item => {
       let theData = maker(item);
 
-      if (theData && rawDataValues[index]) {
-        theData = _.merge(theData, _.omitBy(rawDataValues[index], _.isEmpty));
+      const rawData = rawDataValues.get(theData.rawData.hashCode());
+      if (theData && rawData) {
+        theData = _.merge(theData, _.omitBy(rawData, _.isEmpty));
       }
       data.push(theData);
     });
@@ -134,6 +145,35 @@ const metrics = async (req, res) => {
       config: e && e.config ? e.config : undefined,
     });
   }
+};
+
+const loadRawData = async rawUrls => {
+  const rawData = new Map();
+  const failsRawUrls = [];
+  const knownsError = ['ECONNRESET', 'ECONNABORTED', 'ETIMEDOUT'];
+  // Limiting to 10 per time the request to client (infra problem)
+  await async.eachLimit(rawUrls, 1000, (url, done) => {
+    starws
+      .getJSONData(url)
+      .then(response => {
+        if (
+          response &&
+          ((response.code && knownsError.includes(response.code)) ||
+            (response.errno && knownsError.includes(response.errno)))
+        ) {
+          failsRawUrls.push(url);
+          return done();
+        } else if (response) {
+          if (response.code)
+            logger.warn(`Possible unknown error code: ${response.code}`);
+          rawData.set(url.hashCode(), response);
+        }
+        return done();
+      })
+      .catch(err => logger.error(err));
+  });
+
+  return { failsRawUrls, rawData };
 };
 
 module.exports = metrics;
