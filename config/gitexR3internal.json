@@ -1,5 +1,7 @@
 {
   "star-ws": {
+    "replaceInternalURL4JSONData": true,
+    "repalceInternalURLStr": "http://file-server:4000",
     "urlAuth": "https://agrows-keycloak-r3.labbs.com.br",
     "urlData": "http://data-api:8000",
     "urlFileData": "http://agrowsfileapi:8000",

@@ -41,7 +41,7 @@ const utils = (() => {
       return date;
     },
 
-    prepareString4StarWS: (data, shortStringLen = 250) => {
+    prepareString4StarWS: (data, shortStringLen = 100) => {
       if (!data) {
         logger.debug(`UTILS prepareString4StarWS: String content is invalid!`);
         return data;
@@ -70,7 +70,7 @@ const utils = (() => {
       return data;
     },
 
-    concatArray4StarWS: (data, shortStringLen = 250) => {
+    concatArray4StarWS: (data, shortStringLen = 100) => {
       const str = data && Array.isArray(data) ? data.join(',') : '';
       if (!str) {
         logger.debug(
