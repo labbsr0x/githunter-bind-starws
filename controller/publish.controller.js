@@ -90,9 +90,12 @@ const publish = async (req, res) => {
   } catch (e) {
     logger.error(`PUBLISH CONTROLLER: Error publishing data.`);
     logger.error(e);
-    res.status(500).send({
+    const status =
+      e && e.response && e.response.status ? e.response.status : 500;
+    res.status(status).send({
       message: e && e.message ? e.message : 'Error publishing data.',
       config: e && e.config ? e.config : undefined,
+      data: e && e.response && e.response.data ? e.response.data : undefined,
     });
   }
 };

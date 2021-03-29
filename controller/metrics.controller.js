@@ -1,10 +1,12 @@
 'use strict';
 
 const _ = require('lodash');
-const async = require('async');
+const config = require('config');
 const starws = require('../services/star-ws/controller');
 const nodeMapper = require('../mapper/outbound.mapper');
 const logger = require('../config/logger');
+
+const starwsConfig = config.get('star-ws');
 
 String.prototype.hashCode = function () {
   var hash = 0,
@@ -119,7 +121,7 @@ const metrics = async (req, res) => {
     while (rawUrls.length > 0 && emptyTimes < 10) {
       const { failsRawUrls, rawData } = await loadRawData(rawUrls);
       if (rawData.size > 0) {
-        rawDataValues = _.merge(rawDataValues, rawData);
+        rawDataValues = new Map([...rawDataValues, ...rawData]);
       }
       rawUrls = failsRawUrls;
       emptyTimes++;
@@ -132,11 +134,15 @@ const metrics = async (req, res) => {
       const rawData = rawDataValues.get(theData.rawData.hashCode());
       if (theData && rawData) {
         theData = _.merge(theData, _.omitBy(rawData, _.isEmpty));
+        data.push(theData);
       }
-      data.push(theData);
     });
 
-    res.status(200).send({ data });
+    if (data.length > 0) {
+      res.status(200).send({ data });
+    } else {
+      res.status(204).send();
+    }
   } catch (e) {
     logger.error(`METRICS CONTROLLER: Error getting metrics.`);
     logger.error(e);
@@ -148,32 +154,47 @@ const metrics = async (req, res) => {
 };
 
 const loadRawData = async rawUrls => {
+  rawUrls = replace4InternalURL(rawUrls);
+
   const rawData = new Map();
   const failsRawUrls = [];
-  const knownsError = ['ECONNRESET', 'ECONNABORTED', 'ETIMEDOUT'];
-  // Limiting to 10 per time the request to client (infra problem)
-  await async.eachLimit(rawUrls, 1000, (url, done) => {
-    starws
-      .getJSONData(url)
-      .then(response => {
-        if (
-          response &&
-          ((response.code && knownsError.includes(response.code)) ||
-            (response.errno && knownsError.includes(response.errno)))
-        ) {
-          failsRawUrls.push(url);
-          return done();
-        } else if (response) {
-          if (response.code)
-            logger.warn(`Possible unknown error code: ${response.code}`);
-          rawData.set(url.hashCode(), response);
-        }
-        return done();
-      })
-      .catch(err => logger.error(err));
+  const knownsError = ['ECONNRESET', 'ECONNABORTED', 'ETIMEDOUT', 'ENOTFOUND'];
+
+  const rawDataPromise = [];
+  rawUrls.forEach((url, index) => {
+    rawDataPromise[index] = starws.getJSONData(url);
+  });
+
+  const rawDataValues = await Promise.all(rawDataPromise);
+
+  rawDataValues.forEach((response, index) => {
+    if (
+      response &&
+      ((response.code && knownsError.includes(response.code)) ||
+        (response.errno && knownsError.includes(response.errno)))
+    ) {
+      failsRawUrls.push(rawUrls[index]);
+    } else if (response) {
+      if (response.code)
+        logger.warn(`Possible unknown error code: ${response.code}`);
+      rawData.set(rawUrls[index].hashCode(), response);
+    }
   });
 
   return { failsRawUrls, rawData };
+};
+
+const replace4InternalURL = listUrl => {
+  if (starwsConfig.replaceInternalURL4JSONData) {
+    const internalUrl = starwsConfig.repalceInternalURLStr;
+    listUrl = listUrl.map(url =>
+      url.replace(
+        /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}/,
+        internalUrl,
+      ),
+    );
+  }
+  return listUrl;
 };
 
 module.exports = metrics;
